@@ -1,0 +1,17 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.5
+    environment:
+      POSTGRES_USER: code_solutions
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: code_solutions
+  web:
+    build: .
+    volumes:
+      - .:/django-docker
+    ports:
+      - "8990:8990"
+    depends_on:
+      - db
+    command: /bin/bash -c "pip install --upgrade pip && pip install -r requirements.txt && exec invoke run"
