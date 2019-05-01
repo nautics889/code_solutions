@@ -3,3 +3,4 @@ djangorestframework==3.9.1
 psycopg2==2.7.7
 pytz==2018.9
 invoke==1.0.0
+djangorestframework_simplejwt==4.3.0
