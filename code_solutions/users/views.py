@@ -1,5 +1,5 @@
 from users.models import User
-from rest_framework import generics, mixins, permissions, response, status
+from rest_framework import generics, mixins, viewsets, permissions, response, status
 from users.serializers import UserSerializer
 from django.shortcuts import get_object_or_404
 
@@ -25,27 +25,16 @@ class UserCreateAPIView(mixins.CreateModelMixin,
         return self.create(request, *args, **kwargs)
 
 
-class UserRetrieveAPIView(mixins.RetrieveModelMixin,
-                          generics.GenericAPIView):
+class CurrentUserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+    """
+    Endpoint for current user
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-
-class UserUpdateAPIView(mixins.RetrieveModelMixin,
-                        generics.GenericAPIView):
-    #TODO:
-    # implement updating logic according to AB example
-    pass
-
-
-class CurrentUserRetrieveUpdateAPIView(UserRetrieveAPIView, UserUpdateAPIView):
     http_method_names = ['patch', 'get']
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), pk=self.request.user.pk)
         return obj
-
-    def get(self, request, *args, **kwargs):
-        print('USER: ', request.user, flush=True)
-        return self.retrieve(request, *args, **kwargs)
