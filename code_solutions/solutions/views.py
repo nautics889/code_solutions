@@ -12,6 +12,22 @@ class SolutionsListAPIView(generics.ListAPIView):
     serializer_class = SolutionListSerializer
 
 
+class SolutionRetrieveAPIView(mixins.RetrieveModelMixin,
+                              generics.GenericAPIView):
+    queryset = Solution.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = SolutionSerializer
+
+    def get_object(self, slug):
+        obj = Solution.objects.get(slug=slug)
+        return obj
+
+    def get(self, request, slug):
+        solution = self.get_object(slug)
+        serializer = self.serializer_class(solution)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class SolutionsCreateAPIView(mixins.CreateModelMixin,
                              generics.GenericAPIView):
     """

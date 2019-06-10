@@ -9,7 +9,8 @@ class Solution(models.Model):
 
     title = models.CharField(unique=True, max_length=200, null=True)
     slug = models.SlugField(unique=True, null=True)
-    price = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0.09)])
+    price = models.DecimalField(max_digits=3, decimal_places=2,
+                                validators=[MinValueValidator(0.09)], null=True)
     content = models.TextField(max_length=15000)
     topics = models.ManyToManyField('Topic', related_name='solutions', blank=True)
 
