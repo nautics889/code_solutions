@@ -23,5 +23,6 @@ schema_view = get_swagger_view(title='Code Solutions')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
+    path('solutions/', include('solutions.urls')),
     path('schema/', schema_view),
 ]
