@@ -23,8 +23,8 @@ class Solution(models.Model):
 
 
 class Topic(models.Model):
-    # class Meta:
-    #     ordering = ('title',)
+    class Meta:
+        ordering = ('title',)
 
     title = models.CharField(unique=True, max_length=200, null=True)
     slug = models.SlugField(unique=True, null=True)
@@ -32,7 +32,7 @@ class Topic(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super(Solution, self).save(*args, **kwargs)
+        super(Topic, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title

@@ -1,13 +1,13 @@
 from rest_framework import generics, mixins, response, status, permissions
-from solutions.models import Solution
-from solutions.serializers import SolutionSerializer, SolutionListSerializer
+from solutions.models import Solution, Topic
+from solutions.serializers import SolutionSerializer, SolutionListSerializer, TopicSerializer
 
 
 class SolutionsListAPIView(generics.ListAPIView):
     """
     Endpoint for fetching list of existing solutions
     """
-    queryset = Solution.objects.all().only("title", "price")
+    queryset = Solution.objects.all().only("title", "price", 'topics')
     permission_classes = (permissions.AllowAny,)
     serializer_class = SolutionListSerializer
 
@@ -58,3 +58,28 @@ class SolutionsUpdateDeleteAPIView(mixins.UpdateModelMixin,
     queryset = Solution.objects.all()
     permission_classes = (permissions.IsAuthenticated)
     serializer_class = SolutionSerializer
+
+
+class TopicListAPIView(generics.ListCreateAPIView):
+    """
+    Endpoint for fetching list of existing topics
+    """
+    queryset = Topic.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = TopicSerializer
+
+
+class TopicRetriveAPIView(generics.RetrieveAPIView):
+    queryset = Topic.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = TopicSerializer
+
+    def get_object(self, slug):
+        obj = Topic.objects.get(slug=slug)
+        return obj
+
+    def get(self, request, slug):
+        topic = self.get_object(slug)
+        serializer = self.serializer_class(topic)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+
